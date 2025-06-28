@@ -364,4 +364,63 @@ body {
     padding: 6px 10px;
     font-size: 0.85rem;
     min-width: 70px;
+}
+
+.map-controls-group {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 14px;
+    justify-content: flex-start;
+}
+
+.map-controls-group .btn {
+    padding: 7px 14px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    background: #f3f6fa;
+    border: 2px solid #bfc9d1;
+    color: #333;
+}
+
+.map-controls-group .btn:hover {
+    background: #e2e8f0;
+    border-color: #667eea;
+    color: #222;
+}
+
+.date-range-group label {
+    margin-bottom: 4px;
+}
+
+.date-range-flex {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+}
+
+.date-range-flex .date-input {
+    padding: 5px 8px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    border: 1.5px solid #dee2e6;
+    min-width: 110px;
+    max-width: 130px;
+}
+
+.date-range-flex .btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    min-width: 60px;
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.date-range-flex .btn:hover {
+    background: #4c51bf;
 } 

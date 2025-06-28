@@ -21,17 +21,22 @@
 
         <!-- Controls Panel -->
         <div class="controls-panel">
+            <div class="control-group map-controls-group">
+                <button id="reset-view-btn" class="btn">Reset View</button>
+                <button id="fit-bounds-btn" class="btn">Fit to Data</button>
+            </div>
             <div class="control-group">
                 <label for="timeline-slider">Timeline Slider:</label>
                 <input type="range" id="timeline-slider" min="0" max="100" value="100" class="slider">
                 <span id="date-display">All Dates</span>
             </div>
-            
-            <div class="control-group">
+            <div class="control-group date-range-group">
                 <label>Date Range:</label>
-                <input type="date" id="start-date" class="date-input" placeholder="Start Date">
-                <input type="date" id="end-date" class="date-input" placeholder="End Date">
-                <button id="apply-date-btn" class="btn">Apply Date Range</button>
+                <div class="date-range-flex">
+                    <input type="date" id="start-date" class="date-input" placeholder="Start Date">
+                    <input type="date" id="end-date" class="date-input" placeholder="End Date">
+                    <button id="apply-date-btn" class="btn">Apply</button>
+                </div>
             </div>
             
             <div class="control-group">
@@ -72,12 +77,6 @@
                     <span class="legend-color other"></span>
                     <span>Other Events</span>
                 </div>
-            </div>
-            
-            <div class="control-group">
-                <label>Map Controls:</label>
-                <button id="reset-view-btn" class="btn">Reset View</button>
-                <button id="fit-bounds-btn" class="btn">Fit to Data</button>
             </div>
         </div>
 
