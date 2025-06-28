@@ -36,19 +36,42 @@
             
             <div class="control-group">
                 <label>View Mode:</label>
-                <button id="points-btn" class="btn active">Points</button>
-                <button id="heatmap-btn" class="btn">Heatmap</button>
-                <button id="clusters-btn" class="btn">Clusters</button>
+                <div class="view-mode-group">
+                    <button id="points-btn" class="btn active">Points</button>
+                    <button id="heatmap-btn" class="btn">Heatmap</button>
+                    <button id="clusters-btn" class="btn">Clusters</button>
+                </div>
             </div>
             
             <div class="control-group">
                 <label>Layers:</label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="iran-boundary" checked> Iran Boundary
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="israel-boundary" checked> Israel Boundary
-                </label>
+                <div class="legend-item">
+                    <span class="legend-color iran"></span>
+                    <input type="checkbox" id="iran-boundary" checked>
+                    <span>Iran Administrative Boundaries</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color israel"></span>
+                    <input type="checkbox" id="israel-boundary" checked>
+                    <span>Israel Administrative Boundaries</span>
+                </div>
+            </div>
+            
+            <!-- Move legend here -->
+            <div class="control-group legend-group">
+                <label>Event Types:</label>
+                <div class="legend-item">
+                    <span class="legend-color israel"></span>
+                    <span>Israel Strikes</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color iran"></span>
+                    <span>Iran Strikes</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color other"></span>
+                    <span>Other Events</span>
+                </div>
             </div>
             
             <div class="control-group">
@@ -60,23 +83,6 @@
 
         <!-- Map Container -->
         <div id="map" class="map-container"></div>
-
-        <!-- Legend -->
-        <div class="legend">
-            <h3>Event Types</h3>
-            <div class="legend-item">
-                <span class="legend-color israel"></span>
-                <span>Israel Strikes</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-color iran"></span>
-                <span>Iran Strikes</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-color other"></span>
-                <span>Other Events</span>
-            </div>
-        </div>
 
         <!-- Info Panel -->
         <div class="info-panel">
