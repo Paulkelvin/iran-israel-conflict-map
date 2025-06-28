@@ -1,0 +1,32 @@
+# Large data files
+*.csv
+*.zip
+*.qgz
+*.xlsx
+*.docx
+
+# Python files
+*.py
+*.pyc
+__pycache__/
+
+# QGIS files
+*.qmd
+
+# Keep only essential web app files and GeoJSON data
+!Israel_Iran_Strikes_Data/
+!IranAdminstrative.json/
+!IsraelProvinces.json/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log 

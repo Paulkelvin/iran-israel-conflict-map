@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Israel-Iran Conflict Events Map</title>
+    
+    <!-- MapLibre GL JS CSS -->
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Israel-Iran Conflict Events Visualization</h1>
+            <p>Interactive mapping of conflict events and strikes between Israel and Iran</p>
+        </header>
+
+        <!-- Controls Panel -->
+        <div class="controls-panel">
+            <div class="control-group">
+                <label for="timeline-slider">Timeline:</label>
+                <input type="range" id="timeline-slider" min="0" max="100" value="100" class="slider">
+                <span id="date-display">All Dates</span>
+            </div>
+            
+            <div class="control-group">
+                <label>View Mode:</label>
+                <button id="points-btn" class="btn active">Points</button>
+                <button id="heatmap-btn" class="btn">Heatmap</button>
+                <button id="clusters-btn" class="btn">Clusters</button>
+            </div>
+            
+            <div class="control-group">
+                <label>Layers:</label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="iran-boundary" checked> Iran Boundary
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="israel-boundary" checked> Israel Boundary
+                </label>
+            </div>
+        </div>
+
+        <!-- Map Container -->
+        <div id="map" class="map-container"></div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <h3>Event Types</h3>
+            <div class="legend-item">
+                <span class="legend-color israel"></span>
+                <span>Israel Strikes</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color iran"></span>
+                <span>Iran Strikes</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-color other"></span>
+                <span>Other Events</span>
+            </div>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="info-panel">
+            <h3>Event Information</h3>
+            <div id="event-info">
+                <p>Click on a point to view event details</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MapLibre GL JS -->
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="map.js"></script>
+</body>
+</html> 
