@@ -8,6 +8,7 @@ let dateRange = { min: null, max: null };
 let currentViewMode = 'points';
 let popup = null;
 let mapLoaded = false;
+let clusterSource = null;
 
 // Initialize the map when the page loads
 document.addEventListener('DOMContentLoaded', function() {
@@ -22,10 +23,10 @@ function initializeMap() {
     map = new maplibregl.Map({
         container: 'map',
         style: `https://api.maptiler.com/maps/streets/style.json?key=${apiKey}`,
-        center: [55.2708, 32.4279], // Center between Israel and Iran
-        zoom: 5,
+        center: [51.5, 32.5], // Better center between Israel and Iran
+        zoom: 6, // Closer zoom to study area
         maxZoom: 18,
-        minZoom: 3
+        minZoom: 4
     });
 
     // Add navigation controls
@@ -172,6 +173,10 @@ function calculateDateRange() {
         slider.max = dates.length - 1;
         slider.value = dates.length - 1;
         
+        // Set date inputs
+        document.getElementById('start-date').value = dateRange.min.toISOString().split('T')[0];
+        document.getElementById('end-date').value = dateRange.max.toISOString().split('T')[0];
+        
         updateDateDisplay();
     } else {
         console.warn('No valid dates found in data');
@@ -305,6 +310,11 @@ function setupEventListeners() {
         filterEventsByDate(this.value);
     });
     
+    // Date range inputs
+    document.getElementById('apply-date-btn').addEventListener('click', function() {
+        filterEventsByDateRange();
+    });
+    
     // View mode buttons
     document.getElementById('points-btn').addEventListener('click', function() {
         setViewMode('points');
@@ -326,6 +336,43 @@ function setupEventListeners() {
     document.getElementById('israel-boundary').addEventListener('change', function() {
         toggleBoundaryLayer('israel-boundary-layer', this.checked);
     });
+    
+    // Map control buttons
+    document.getElementById('reset-view-btn').addEventListener('click', function() {
+        resetMapView();
+    });
+    
+    document.getElementById('fit-bounds-btn').addEventListener('click', function() {
+        fitMapToData();
+    });
+}
+
+// Filter events by date range
+function filterEventsByDateRange() {
+    const startDate = document.getElementById('start-date').value;
+    const endDate = document.getElementById('end-date').value;
+    
+    if (!startDate || !endDate) {
+        alert('Please select both start and end dates');
+        return;
+    }
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    const filteredEvents = conflictEvents.filter(event => {
+        const eventDate = new Date(event.properties.Date);
+        return eventDate >= start && eventDate <= end;
+    });
+    
+    // Update map source
+    map.getSource('conflict-events').setData({
+        type: 'FeatureCollection',
+        features: filteredEvents
+    });
+    
+    updateDateDisplay(`${startDate} to ${endDate}`);
+    console.log(`Filtered to ${filteredEvents.length} events`);
 }
 
 // Filter events by date
@@ -354,7 +401,11 @@ function filterEventsByDate(sliderValue) {
 function updateDateDisplay(date = null) {
     const dateDisplay = document.getElementById('date-display');
     if (date) {
-        dateDisplay.textContent = date.toLocaleDateString();
+        if (typeof date === 'string') {
+            dateDisplay.textContent = date;
+        } else {
+            dateDisplay.textContent = date.toLocaleDateString();
+        }
     } else {
         dateDisplay.textContent = 'All Dates';
     }
@@ -379,11 +430,45 @@ function setViewMode(mode) {
             map.setLayoutProperty('conflict-heatmap', 'visibility', 'visible');
             break;
         case 'clusters':
-            // For clustering, we'd need to implement a different approach
-            // This is a placeholder for future implementation
-            console.log('Clustering mode - to be implemented');
+            // For clustering, we'll implement a simple approach
+            // This creates larger circles for areas with many events
+            map.setLayoutProperty('conflict-points', 'visibility', 'visible');
+            map.setLayoutProperty('conflict-heatmap', 'visibility', 'none');
+            
+            // Update point size to show clustering effect
+            map.setPaintProperty('conflict-points', 'circle-radius', [
+                'interpolate',
+                ['linear'],
+                ['zoom'],
+                5, 6,
+                10, 12
+            ]);
             break;
     }
+}
+
+// Reset map view
+function resetMapView() {
+    map.flyTo({
+        center: [51.5, 32.5],
+        zoom: 6,
+        duration: 2000
+    });
+}
+
+// Fit map to data bounds
+function fitMapToData() {
+    if (conflictEvents.length === 0) return;
+    
+    const bounds = new maplibregl.LngLatBounds();
+    conflictEvents.forEach(event => {
+        bounds.extend(event.geometry.coordinates);
+    });
+    
+    map.fitBounds(bounds, {
+        padding: 50,
+        duration: 2000
+    });
 }
 
 // Toggle boundary layer visibility

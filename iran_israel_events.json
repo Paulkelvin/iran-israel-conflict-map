@@ -1,0 +1,523 @@
+{
+  "events": [
+    {
+      "event_id": "EVT001",
+      "date": "2025-06-12",
+      "location_description": "Natanz",
+      "country": "Iran",
+      "target_type": [
+        "Nuclear Facility"
+      ],
+      "weapon_type": [
+        "Airstrike",
+        "Drone"
+      ],
+      "reported_impact": "Israel launched a large-scale air campaign. Strikes hit Natanz nuclear enrichment facility, destroying above-ground sections. Significant damage to air defenses and missile sites reported.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/26/how-israel-launched-attacks-from-inside-iran-to-sow-chaos-during-the-war"
+      ]
+    },
+    {
+      "event_id": "EVT002",
+      "date": "2025-06-12",
+      "location_description": "Isfahan",
+      "country": "Iran",
+      "target_type": [
+        "Military Base",
+        "Strategic Infrastructure"
+      ],
+      "weapon_type": [
+        "Airstrike",
+        "Drone"
+      ],
+      "reported_impact": "As part of a large-scale air campaign, military and infrastructure targets were hit. Senior nuclear scientists and IRGC commanders were targeted.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/26/how-israel-launched-attacks-from-inside-iran-to-sow-chaos-during-the-war"
+      ]
+    },
+    {
+      "event_id": "EVT003",
+      "date": "2025-06-12",
+      "location_description": "Khorramabad",
+      "country": "Iran",
+      "target_type": [
+        "Military Base"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "Israel attacked the IRGC's largest missile site in Khorramabad, targeting ballistic missile capabilities.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/26/how-israel-launched-attacks-from-inside-iran-to-sow-chaos-during-the-war"
+      ]
+    },
+    {
+      "event_id": "EVT004",
+      "date": "2025-06-13",
+      "location_description": "Tehran",
+      "country": "Iran",
+      "target_type": [
+        "Urban Area",
+        "Civilian Area"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "Explosions heard across Tehran, with air defense systems activated to intercept Israeli strikes. 78 people killed, over 320 wounded, mostly civilians, according to Iran's UN ambassador.",
+      "source_url": [
+        "https://apnews.com/article/iran-explosions-israel-tehran-00234a06e5128a8aceb406b140297299",
+        "https://www.bbc.com/news/articles/crr7gdr82e0o"
+      ]
+    },
+    {
+      "event_id": "EVT005",
+      "date": "2025-06-13",
+      "location_description": "Qom",
+      "country": "Iran",
+      "target_type": [
+        "Strategic Infrastructure"
+      ],
+      "weapon_type": [
+        "Airstrike",
+        "Drone"
+      ],
+      "reported_impact": "Explosions reported in Qom. Part of wider strikes where 78 people were killed and over 320 wounded.",
+      "source_url": [
+        "https://apnews.com/article/iran-explosions-israel-tehran-00234a06e5128a8aceb406b140297299"
+      ]
+    },
+    {
+      "event_id": "EVT006",
+      "date": "2025-06-13",
+      "location_description": "Tabriz",
+      "country": "Iran",
+      "target_type": [
+        "Strategic Infrastructure"
+      ],
+      "weapon_type": [
+        "Airstrike",
+        "Drone"
+      ],
+      "reported_impact": "A radar site near Tabriz was targeted. Part of wider strikes where 78 people were killed and over 320 wounded.",
+      "source_url": [
+        "https://apnews.com/article/iran-explosions-israel-tehran-00234a06e5128a8aceb406b140297299"
+      ]
+    },
+    {
+      "event_id": "EVT007",
+      "date": "2025-06-13",
+      "location_description": "Jerusalem",
+      "country": "Israel",
+      "target_type": [
+        "Urban Area",
+        "Civilian Area"
+      ],
+      "weapon_type": [
+        "Ballistic Missile",
+        "Drone"
+      ],
+      "reported_impact": "Iran launched over 100 missiles and drones. Most were intercepted, but some caused critical injuries (two people), moderate injuries (eight), and slight injuries (34) from shrapnel.",
+      "source_url": [
+        "https://www.reuters.com/world/middle-east/trump-announces-israel-iran-ceasefire-2025-06-23/",
+        "https://www.bbc.com/news/articles/crr7gdr82e0o"
+      ]
+    },
+    {
+      "event_id": "EVT008",
+      "date": "2025-06-13",
+      "location_description": "Tel Aviv",
+      "country": "Israel",
+      "target_type": [
+        "Urban Area",
+        "Civilian Area"
+      ],
+      "weapon_type": [
+        "Ballistic Missile",
+        "Drone"
+      ],
+      "reported_impact": "Iran launched over 100 missiles and drones. Most were intercepted, but some caused critical injuries and shrapnel wounds.",
+      "source_url": [
+        "https://www.reuters.com/world/middle-east/trump-announces-israel-iran-ceasefire-2025-06-23/"
+      ]
+    },
+    {
+      "event_id": "EVT009",
+      "date": "2025-06-14",
+      "location_description": "South Pars Gas Field, Bushehr Province",
+      "country": "Iran",
+      "target_type": [
+        "Strategic Infrastructure"
+      ],
+      "weapon_type": [
+        "Drone",
+        "Airstrike"
+      ],
+      "reported_impact": "Israeli drones struck the South Pars Gas Field, causing a blaze that was later extinguished. The scale of disruption remains unclear.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/26/visualising-12-days-of-the-israel-iran-conflict",
+        "https://www.aljazeera.com/news/2025/6/14/iranian-state-media-says-new-missile-drone-attack-launched-against-israel"
+      ]
+    },
+    {
+      "event_id": "EVT010",
+      "date": "2025-06-14",
+      "location_description": "Shahran oil depot, northwest of Tehran",
+      "country": "Iran",
+      "target_type": [
+        "Strategic Infrastructure"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "Israeli strike caused a fire at the Shahran oil depot. The depot holds about 8 million liters of gasoline daily, threatening significant damage to nearby residential areas.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/26/visualising-12-days-of-the-israel-iran-conflict",
+        "https://www.aljazeera.com/news/2025/6/14/iranian-state-media-says-new-missile-drone-attack-launched-against-israel"
+      ]
+    },
+    {
+      "event_id": "EVT011",
+      "date": "2025-06-14",
+      "location_description": "Bat Yam",
+      "country": "Israel",
+      "target_type": [
+        "Civilian Area"
+      ],
+      "weapon_type": [
+        "Ballistic Missile"
+      ],
+      "reported_impact": "Four people, including women and children, were killed in Bat Yam, south of Tel Aviv, with scores more wounded due to a blast damaging a multistory building.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/26/visualising-12-days-of-the-israel-iran-conflict"
+      ]
+    },
+    {
+      "event_id": "EVT012",
+      "date": "2025-06-14",
+      "location_description": "Northern Israel",
+      "country": "Israel",
+      "target_type": [
+        "Civilian Area",
+        "Urban Area"
+      ],
+      "weapon_type": [
+        "Ballistic Missile"
+      ],
+      "reported_impact": "Iranian missiles struck northern Israel, killing three people and wounding 13.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/26/visualising-12-days-of-the-israel-iran-conflict",
+        "https://www.aljazeera.com/news/2025/6/14/iranian-state-media-says-new-missile-drone-attack-launched-against-israel"
+      ]
+    },
+    {
+      "event_id": "EVT013",
+      "date": "2025-06-14",
+      "location_description": "Haifa",
+      "country": "Israel",
+      "target_type": [
+        "Urban Area"
+      ],
+      "weapon_type": [
+        "Ballistic Missile",
+        "Drone"
+      ],
+      "reported_impact": "Iran launched a new wave of drone and missile attacks targeting Haifa and Tel Aviv. No specific casualty or damage details reported.",
+      "source_url": [
+        "https://www.aljazeera.com/gallery/2025/6/19/iran-launches-missile-attacks-as-israel-strikes-nuclear-sites"
+      ]
+    },
+    {
+      "event_id": "EVT014",
+      "date": "2025-06-15",
+      "location_description": "Tehran",
+      "country": "Iran",
+      "target_type": [
+        "Strategic Infrastructure"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "Israeli strikes hit an oil refinery in southern Tehran, causing heavy smoke and fire.",
+      "source_url": [
+        "https://www.bbc.com/news/articles/ce8zv8j563po"
+      ]
+    },
+    {
+      "event_id": "EVT015",
+      "date": "2025-06-15",
+      "location_description": "Haifa oil refinery",
+      "country": "Israel",
+      "target_type": [
+        "Strategic Infrastructure"
+      ],
+      "weapon_type": [
+        "Ballistic Missile"
+      ],
+      "reported_impact": "Iranian missile strike hit the Bazan oil refinery in Haifa, killing three people.",
+      "source_url": [
+        "https://www.bbc.com/news/articles/ce8zv8j563po"
+      ]
+    },
+    {
+      "event_id": "EVT016",
+      "date": "2025-06-15",
+      "location_description": "Rehovot",
+      "country": "Israel",
+      "target_type": [
+        "Civilian Area"
+      ],
+      "weapon_type": [
+        "Ballistic Missile"
+      ],
+      "reported_impact": "Iranian missile barrage caused significant casualties in Rehovot, with debris, bloodstained bandages, and shattered glass reported. At least 24 people killed, 380 wounded in wider attacks across Israel on this day.",
+      "source_url": [
+        "https://www.aljazeera.com/news/liveblog/2025/6/15/updates-death-toll-grows-as-iran-and-israel-continue-to-trade-attacks",
+        "https://www.aljazeera.com/news/2025/6/16/athlete-pilates-instructor-teacher-human-toll-of-israels-attack-on-iran"
+      ]
+    },
+    {
+      "event_id": "EVT017",
+      "date": "2025-06-15",
+      "location_description": "Western Iran",
+      "country": "Iran",
+      "target_type": [
+        "Military Base"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "Israeli air force conducted strikes on storage and missile launch infrastructure sites in western Iran. At least 224 people killed, 1,481 wounded in wider attacks across Iran on this day.",
+      "source_url": [
+        "https://www.bbc.com/news/articles/ce8zv8j563po",
+        "https://www.aljazeera.com/news/2025/6/16/athlete-pilates-instructor-teacher-human-toll-of-israels-attack-on-iran"
+      ]
+    },
+    {
+      "event_id": "EVT018",
+      "date": "2025-06-16",
+      "location_description": "Tel Aviv",
+      "country": "Israel",
+      "target_type": [
+        "Urban Area"
+      ],
+      "weapon_type": [
+        "Ballistic Missile"
+      ],
+      "reported_impact": "Iran launched missiles targeting Tel Aviv. Three people killed, over 70 injured (one in serious condition, five in moderate condition). Damage reported to two buildings in Tel Aviv.",
+      "source_url": [
+        "https://www.aljazeera.com/news/liveblog/2025/6/15/updates-death-toll-grows-as-iran-and-israel-continue-to-trade-attacks"
+      ]
+    },
+    {
+      "event_id": "EVT019",
+      "date": "2025-06-16",
+      "location_description": "Iranian state TV headquarters, Tehran",
+      "country": "Iran",
+      "target_type": [
+        "Strategic Infrastructure"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "Israeli strike hit Iranian state TV headquarters, causing black smoke to billow.",
+      "source_url": [
+        "https://www.aljazeera.com/news/liveblog/2025/6/15/updates-death-toll-grows-as-iran-and-israel-continue-to-trade-attacks",
+        "https://www.reuters.com/business/aerospace-defense/israel-killed-30-iranian-security-chiefs-11-nuclear-scientists-israeli-official-2025-06-27/"
+      ]
+    },
+    {
+      "event_id": "EVT020",
+      "date": "2025-06-17",
+      "location_description": "Petah Tikva",
+      "country": "Israel",
+      "target_type": [
+        "Civilian Area"
+      ],
+      "weapon_type": [
+        "Ballistic Missile"
+      ],
+      "reported_impact": "Iranian missile struck a residential building, killing three people and causing property damage.",
+      "source_url": [
+        "https://www.bbc.com/news/articles/cdjxdgjpd48o"
+      ]
+    },
+    {
+      "event_id": "EVT021",
+      "date": "2025-06-18",
+      "location_description": "Golan Heights",
+      "country": "Israel",
+      "target_type": [
+        "Unknown"
+      ],
+      "weapon_type": [
+        "Drone"
+      ],
+      "reported_impact": "Two Iranian drones intercepted over the Golan Heights, heading from southern Syria. No casualties or damage reported.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/26/visualising-12-days-of-the-israel-iran-conflict"
+      ]
+    },
+    {
+      "event_id": "EVT022",
+      "date": "2025-06-18",
+      "location_description": "Natanz",
+      "country": "Iran",
+      "target_type": [
+        "Nuclear Facility"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "Israeli strikes hit underground infrastructure at Natanz, likely damaging or destroying thousands of centrifuges. No radiation increase reported.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/26/visualising-12-days-of-the-israel-iran-conflict"
+      ]
+    },
+    {
+      "event_id": "EVT023",
+      "date": "2025-06-20",
+      "location_description": "Rehovot, Weizmann Institute of Science",
+      "country": "Israel",
+      "target_type": [
+        "Strategic Infrastructure"
+      ],
+      "weapon_type": [
+        "Ballistic Missile"
+      ],
+      "reported_impact": "Iranian missile barrage hit the Weizmann Institute, causing unprecedented casualties and massive destruction.",
+      "source_url": [
+        "https://www.aljazeera.com/opinions/2025/6/24/how-israel-failed-in-iran"
+      ]
+    },
+    {
+      "event_id": "EVT024",
+      "date": "2025-06-21",
+      "location_description": "Isfahan",
+      "country": "Iran",
+      "target_type": [
+        "Nuclear Facility"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "Hit centrifuge manufacturing workshop, no casualties reported.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/21/israel-strikes-irans-isfahan-nuclear-site-buildings-on-fire-in-tel-aviv"
+      ]
+    },
+    {
+      "event_id": "EVT025",
+      "date": "2025-06-21",
+      "location_description": "Shiraz, Fars province",
+      "country": "Iran",
+      "target_type": [
+        "Military Base"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "Targeted military installation, no details on impacts.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/21/israel-strikes-irans-isfahan-nuclear-site-buildings-on-fire-in-tel-aviv"
+      ]
+    },
+    {
+      "event_id": "EVT026",
+      "date": "2025-06-21",
+      "location_description": "Qom",
+      "country": "Iran",
+      "target_type": [
+        "Urban Area"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "Saeed Izadi killed.",
+      "source_url": [
+        "https://www.aljazeera.com/news/2025/6/21/israel-strikes-irans-isfahan-nuclear-site-buildings-on-fire-in-tel-aviv"
+      ]
+    },
+    {
+      "event_id": "EVT027",
+      "date": "2025-06-22",
+      "location_description": "Najafabad, Isfahan province",
+      "country": "Iran",
+      "target_type": [
+        "Civilian Area"
+      ],
+      "weapon_type": [
+        "Drone"
+      ],
+      "reported_impact": "Israeli drone strike killed three civilians near Montazeri hospital.",
+      "source_url": [
+        "https://www.bbc.com/news/live/ckg3rzj8emjt"
+      ]
+    },
+    {
+      "event_id": "EVT028",
+      "date": "2025-06-22",
+      "location_description": "Yazd province",
+      "country": "Iran",
+      "target_type": [
+        "Military Base"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "Israeli airstrike killed seven IRGC members and two conscripts.",
+      "source_url": [
+        "https://www.bbc.com/news/live/ckg3rzj8emjt"
+      ]
+    },
+    {
+      "event_id": "EVT029",
+      "date": "2025-06-22",
+      "location_description": "Fordow",
+      "country": "Iran",
+      "target_type": [
+        "Nuclear Facility"
+      ],
+      "weapon_type": [
+        "Airstrike (U.S.)"
+      ],
+      "reported_impact": "U.S. airstrikes with bunker-busting bombs targeted the underground nuclear enrichment site. Facilities 'obliterated'.",
+      "source_url": [
+        "https://apnews.com/article/israel-iran-nuclear-science-attacks-e298f00ba261debba4499a48c9df8b3d",
+        "https://www.aljazeera.com/news/2025/6/22/iran-israel-trade-missiles-as-us-bombing-of-nuclear-sites-escalates-crisis"
+      ]
+    },
+    {
+      "event_id": "EVT030",
+      "date": "2025-06-24",
+      "location_description": "Fordow Fuel Enrichment Facility, near Qom",
+      "country": "Iran",
+      "target_type": [
+        "Nuclear Facility"
+      ],
+      "weapon_type": [
+        "Airstrike"
+      ],
+      "reported_impact": "U.S. airstrikes caused limited damage to Fordow enrichment site, setting back Iran's nuclear capability by a few months.",
+      "source_url": [
+        "https://www.reuters.com/world/middle-east/trump-announces-israel-iran-ceasefire-2025-06-23/"
+      ]
+    },
+    {
+      "event_id": "EVT031",
+      "date": "2025-06-24",
+      "location_description": "Tel Aviv",
+      "country": "Israel",
+      "target_type": [
+        "Urban Area"
+      ],
+      "weapon_type": [
+        "Missile"
+      ],
+      "reported_impact": "Significant damage and several casualties from Iranian missile strikes.",
+      "source_url": [
+        "https://www.aljazeera.com/news/liveblog/2025/6/24/live-trump-announces-ceasefire-no-confirmation-from-israel-iran",
+        "https://www.aljazeera.com/video/newsfeed/2025/6/24/iranian-missile-strikes-building-in-israel"
+      ]
+    }
+  ]
+}

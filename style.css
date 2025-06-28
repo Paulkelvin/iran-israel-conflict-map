@@ -17,7 +17,7 @@ body {
         "controls map"
         "legend info";
     grid-template-columns: 300px 1fr;
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto 1fr auto;
     height: 100vh;
     gap: 10px;
     padding: 10px;
@@ -53,6 +53,8 @@ body {
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     height: fit-content;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .control-group {
@@ -101,6 +103,22 @@ body {
     color: #666;
 }
 
+/* Date input styling */
+.date-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
 .btn {
     background: #f8f9fa;
     border: 2px solid #dee2e6;
@@ -143,11 +161,15 @@ body {
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: relative;
+    min-height: 400px;
+    resize: both;
+    overflow: auto;
 }
 
 #map {
     width: 100%;
     height: 100%;
+    min-height: 400px;
 }
 
 /* Legend */
@@ -201,6 +223,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
+    max-height: 300px;
 }
 
 .info-panel h3 {
@@ -254,20 +277,35 @@ body {
             "legend"
             "info";
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto 1fr auto;
+        grid-template-rows: auto auto 60vh auto auto;
+        height: 100vh;
+        gap: 8px;
+        padding: 8px;
     }
     
     .header h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
+    }
+    
+    .header p {
+        font-size: 1rem;
     }
     
     .controls-panel {
         order: 2;
+        max-height: none;
+        overflow-y: visible;
     }
     
     .map-container {
         order: 3;
-        height: 400px;
+        min-height: 60vh;
+        height: 60vh;
+    }
+    
+    #map {
+        min-height: 60vh;
+        height: 60vh;
     }
     
     .legend {
@@ -276,5 +314,33 @@ body {
     
     .info-panel {
         order: 5;
+        max-height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        grid-template-rows: auto auto 50vh auto auto;
+    }
+    
+    .map-container {
+        height: 50vh;
+    }
+    
+    #map {
+        height: 50vh;
+    }
+    
+    .header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .controls-panel {
+        padding: 15px;
+    }
+    
+    .btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
     }
 } 
