@@ -199,10 +199,16 @@ body {
 .legend-color {
     width: 20px;
     height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    max-width: 20px;
+    max-height: 20px;
     border-radius: 50%;
     margin-right: 6px;
     border: 2px solid #fff;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    flex-shrink: 0;
 }
 
 .legend-color.israel {
@@ -324,6 +330,12 @@ body {
         order: 5;
         max-height: 200px;
     }
+    
+    .apply-btn {
+        width: 100%;
+        max-width: 100%;
+        font-size: 1rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -423,4 +435,25 @@ body {
 
 .date-range-flex .btn:hover {
     background: #4c51bf;
+}
+
+.section-header {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 6px;
+    margin-top: 10px;
+    color: #4c51bf;
+    letter-spacing: 0.5px;
+    border-bottom: 1.5px solid #e2e8f0;
+    padding-bottom: 2px;
+    background: #f3f6fa;
+    border-radius: 4px 4px 0 0;
+    padding-left: 2px;
+}
+
+.apply-btn {
+    margin-top: 6px;
+    width: 100%;
+    max-width: 120px;
+    align-self: flex-start;
 } 
