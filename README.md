@@ -232,7 +232,6 @@ The application uses GeoJSON format with the following properties:
 - **Reporting Bias**: Events may be underreported or selectively covered
 - **Verification Challenges**: Some events may lack independent verification
 - **Geographic Precision**: Some locations may be approximate
-- **Temporal Gaps**: Potential delays in event reporting and data processing
 - **AI Extraction Accuracy**: LLM-extracted data requires manual validation
 
 ### Data Validation Process

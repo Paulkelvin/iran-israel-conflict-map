@@ -15,65 +15,80 @@
     <div class="container">
         <!-- Header -->
         <header class="header">
-            <h1>Israel-Iran Conflict Events Visualization</h1>
-            <p>Interactive mapping of conflict events and strikes between Israel and Iran</p>
+            <h1>Iran-Israel Conflict Events Visualization</h1>
+            <p>Interactive mapping of conflict events and strikes between Iran and Israel</p>
         </header>
 
         <!-- Controls Panel -->
         <div class="controls-panel">
-            <div class="control-group map-controls-group">
-                <div class="section-header">Map Controls</div>
-                <button id="reset-view-btn" class="btn">Reset View</button>
-                <button id="fit-bounds-btn" class="btn">Fit to Data</button>
+            <!-- Mobile Controls Toggle -->
+            <div class="mobile-controls-toggle">
+                <button id="toggle-controls-btn" class="btn toggle-btn">⚙️ Controls</button>
             </div>
-            <div class="control-group">
-                <div class="section-header">Timeline</div>
-                <label for="timeline-slider">Timeline Slider:</label>
-                <input type="range" id="timeline-slider" min="0" max="100" value="100" class="slider">
-                <span id="date-display">All Dates</span>
-            </div>
-            <div class="control-group date-range-group">
-                <div class="section-header">Date Range</div>
-                <label>Date Range:</label>
-                <div class="date-range-flex">
-                    <input type="date" id="start-date" class="date-input" placeholder="Start Date">
-                    <input type="date" id="end-date" class="date-input" placeholder="End Date">
+            
+            <div class="controls-content">
+                <div class="control-group map-controls-group">
+                    <div class="section-header">Map Controls</div>
+                    <button id="reset-view-btn" class="btn">Reset</button>
+                    <button id="fit-bounds-btn" class="btn">Fit to Data</button>
                 </div>
-                <button id="apply-date-btn" class="btn apply-btn">Apply</button>
-            </div>
-            <div class="control-group">
-                <div class="section-header">View Mode</div>
-                <label>View Mode:</label>
-                <div class="view-mode-group">
-                    <button id="points-btn" class="btn active">Points</button>
-                    <button id="heatmap-btn" class="btn">Heatmap</button>
-                    <button id="clusters-btn" class="btn">Clusters</button>
+                <div class="control-group">
+                    <div class="section-header">Timeline</div>
+                    <div class="timeline-controls">
+                        <div class="timeline-slider-container">
+                            <input type="range" id="timeline-slider" min="0" max="100" value="100" class="slider">
+                            <span id="date-display">All Dates</span>
+                        </div>
+                        <div class="animation-controls">
+                            <button id="play-pause-btn" class="btn">▶ Play</button>
+                            <button id="reset-animation-btn" class="btn">⏹ Reset</button>
+                            <select id="animation-speed" class="speed-select">
+                                <option value="1000">1x</option>
+                                <option value="500">2x</option>
+                                <option value="250">4x</option>
+                                <option value="200">5x</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="control-group">
-                <div class="section-header">Layers</div>
-                <label>Layers:</label>
-                <div class="legend-item">
-                    <span class="legend-color iran"></span>
-                    <input type="checkbox" id="iran-boundary" checked>
-                    <span>Iran Boundary</span>
+                <div class="control-group date-range-group">
+                    <div class="section-header">Date Range</div>
+                    <div class="date-range-flex">
+                        <input type="date" id="start-date" class="date-input" placeholder="Start Date">
+                        <input type="date" id="end-date" class="date-input" placeholder="End Date">
+                    </div>
+                    <button id="apply-date-btn" class="btn apply-btn">Apply</button>
                 </div>
-                <div class="legend-item">
-                    <span class="legend-color israel"></span>
-                    <input type="checkbox" id="israel-boundary" checked>
-                    <span>Israel Boundary</span>
+                <div class="control-group">
+                    <div class="section-header">View Mode</div>
+                    <div class="view-mode-group">
+                        <button id="points-btn" class="btn active">Points</button>
+                        <button id="heatmap-btn" class="btn">Heatmap</button>
+                    </div>
                 </div>
-            </div>
-            <div class="control-group legend-group">
-                <div class="section-header">Event Types</div>
-                <label>Event Types:</label>
-                <div class="legend-item">
-                    <span class="legend-color israel"></span>
-                    <span>Israel Strikes</span>
+                <div class="control-group">
+                    <div class="section-header">Layers</div>
+                    <div class="legend-item">
+                        <span class="legend-color iran"></span>
+                        <input type="checkbox" id="iran-boundary" checked>
+                        <span>Iran Boundary</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color israel"></span>
+                        <input type="checkbox" id="israel-boundary" checked>
+                        <span>Israel Boundary</span>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <span class="legend-color iran"></span>
-                    <span>Iran Strikes</span>
+                <div class="control-group legend-group">
+                    <div class="section-header">Event Types</div>
+                    <div class="legend-item">
+                        <span class="legend-color israel"></span>
+                        <span>Israel Strikes</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color iran"></span>
+                        <span>Iran Strikes</span>
+                    </div>
                 </div>
             </div>
         </div>
