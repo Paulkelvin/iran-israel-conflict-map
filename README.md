@@ -1,169 +1,328 @@
-# Israel-Iran Conflict Events Visualization
+# Iran-Israel Conflict Events Visualization
 
-An interactive web mapping application that visualizes conflict events and strikes between Israel and Iran using MapLibre GL JS and MapTiler basemaps.
+An interactive web mapping application visualizing kinetic events from the 2025 Iran-Israel conflict using MapLibre GL JS and MapTiler basemaps.
+
+## Live Demo
+Access the live application at: [GitHub Pages URL]
 
 ## Features
 
-- **Interactive Map**: Visualize conflict events on an interactive map
-- **Timeline Slider**: Filter events by date range
-- **Multiple View Modes**: Switch between points, heatmap, and clustering views
-- **Event Details**: Click on points to view detailed event information
-- **Boundary Layers**: Toggle Iran and Israel administrative boundaries
-- **Responsive Design**: Works on desktop and mobile devices
+- **Interactive Map**: Real-time visualization of conflict events with clustering and filtering
+- **Timeline Animation**: Animated playback of events chronologically with speed controls
+- **Multiple View Modes**: Points, heatmap, and boundary layer toggles
+- **Date Range Filtering**: Filter events by specific date ranges
+- **Responsive Design**: Optimized for desktop and mobile devices
+- **Event Details**: Clickable popups with detailed event information
+- **Geographic Boundaries**: Toggle Israel and Iran administrative boundaries
 
-## Project Structure
+## Technical Stack
 
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **Mapping**: MapLibre GL JS (open-source alternative to Mapbox GL JS)
+- **Basemaps**: MapTiler (satellite and street maps)
+- **Data Format**: GeoJSON
+- **Styling**: Custom CSS with responsive design
+- **Deployment**: GitHub Pages
+
+## Data Collection & Processing Documentation
+
+### 1. Data Sources
+This map visualizes kinetic events (e.g., airstrikes, drone attacks, missile strikes) from the 2025 Iran–Israel conflict. Data was sourced from both structured databases and unstructured news articles.
+
+**Structured Sources:**
+- Uppsala Conflict Data Program (UCDP-GED)
+
+**Unstructured Sources (News Media):**
+Events were extracted from reputable media reports, including:
+- Al Jazeera
+- Associated Press
+- Reuters
+- BBC News
+- The Jerusalem Post
+- Haaretz
+- Fox News
+- CNN
+- The New York Times
+- CBS News
+
+### 2. AI-Assisted Event Extraction
+To complement UCDP data and enrich detail, we extracted structured event data from textual news reports using a Large Language Model (LLM)-based method.
+
+**Approach:**
+We used ChatGPT-4 (or Claude/Grok) with a consistent prompt for extracting structured data from news articles.
+
+**Prompt Template:**
 ```
-├── index.html              # Main HTML file
-├── style.css               # CSS styling
-├── map.js                  # JavaScript map functionality
-├── README.md               # This file
-├── Israel_Iran_Strikes_Data/
-│   └── Israel_Iran_Strikes.geojson  # Conflict events data
-├── IranAdminstrative.json/
-│   └── IranBoundary.json            # Iran administrative boundaries
-└── IsraelProvinces.json/
-    └── IsraelBoundary.json          # Israel administrative boundaries
+Act as a geopolitical data analyst. From the text at the following URL [Insert URL], extract all instances of missile attacks, drone strikes, or other kinetic military events related to the Iran-Israel conflict since [Start Date]. For each event, provide the following information in a structured JSON format:
+
+{
+  "events": [
+    {
+      "date": "YYYY-MM-DD",
+      "location_description": "City, region, or specific landmark mentioned.",
+      "country": "Israel or Iran",
+      "target_type": "Categorize as 'Military Base', 'Nuclear Facility', 'Strategic Infrastructure', 'Urban Area', 'Civilian Area', or 'Unknown'.",
+      "weapon_type": "e.g., 'Ballistic Missile', 'Cruise Missile', 'Drone', 'Airstrike'",
+      "reported_impact": "Summarize any reported damage, casualties, or interceptions.",
+      "source_url": "[Insert URL]"
+    }
+  ]
+}
 ```
+
+**Outcome:**
+This method enabled structured, JSON-ready datasets from unstructured news content, increasing coverage and granularity of reported conflict events.
+
+### 3. Data Cleaning & Geocoding
+
+**Cleaning Actions:**
+- Consolidated all structured and AI-extracted data into a master spreadsheet
+- Removed duplicates using spreadsheet logic and manual review
+- Standardized column names for compatibility (e.g., Date → date, Latitude → lat, etc.)
+- All dates were formatted in ISO format (YYYY-MM-DD) for use in time filters
+- Coordinate fields were validated to ensure they were numeric and correctly georeferenced
+
+**Geocoding Method:**
+- Geolocation for place names (when no coordinates were available) was completed using Python and the Nominatim geocoder (OpenStreetMap)
+- A Python script automated the location-to-coordinate conversion and updated the dataset accordingly
+
+**✅ Result:**
+The final dataset is a GeoJSON file containing verified and structured conflict events with geographic coordinates, temporal data, and contextual metadata — ready for use in interactive visualizations and spatial analysis.
+
+## Technical Implementation
+
+### Map Configuration
+- **Library**: MapLibre GL JS v3.6.0
+- **Basemap Provider**: MapTiler (requires API key)
+- **Projection**: Web Mercator (EPSG:3857)
+- **Initial View**: Automatically fits to data bounds with padding
+- **Min/Max Zoom**: 3-18 for optimal detail levels
+
+### Data Structure
+The application uses GeoJSON format with the following properties:
+```json
+{
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [longitude, latitude]
+  },
+  "properties": {
+    "Event_ID": "Unique identifier",
+    "Date": "YYYY-MM-DD format",
+    "Country": "Israel or Iran",
+    "City/Region": "Location description",
+    "Weapon_Type": "Type of weapon used",
+    "Reported_Impact": "Damage/casualty summary",
+    "Source_URL": "Source link"
+  }
+}
+```
+
+### Key Features Implementation
+
+#### Timeline Animation
+- **Technology**: JavaScript `setInterval()` with configurable speed
+- **Speed Options**: 1x, 2x, 3x, 5x playback speeds
+- **Controls**: Play/pause, reset, speed selector
+- **Integration**: Synchronized with date filtering and map updates
+
+#### Event Filtering
+- **Date Range**: Client-side filtering using JavaScript Date objects
+- **Country Filter**: Toggle visibility for Israel/Iran events
+- **Real-time Updates**: Immediate map refresh on filter changes
+
+#### Responsive Design
+- **Mobile-First**: CSS Grid with responsive breakpoints
+- **Touch Optimization**: Larger touch targets for mobile devices
+- **Collapsible Controls**: Mobile-friendly control panel with toggle
+
+#### Performance Optimizations
+- **Data Loading**: Asynchronous GeoJSON loading
+- **Clustering**: Automatic point clustering at lower zoom levels
+- **Lazy Rendering**: Map layers loaded on-demand
+- **Memory Management**: Proper cleanup of event listeners
 
 ## Setup Instructions
 
-### 1. Get a MapTiler API Key
+### Prerequisites
+- Modern web browser with JavaScript enabled
+- MapTiler API key (free tier available)
 
-1. Go to [MapTiler](https://www.maptiler.com/)
-2. Create a free account
-3. Get your API key from the dashboard
-4. Replace `'YOUR_MAPTILER_API_KEY'` in `map.js` line 15 with your actual API key
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Paulkelvin/iran-israel-conflict-map.git
+   cd iran-israel-conflict-map
+   ```
 
-### 2. Run the Application
+2. Add your MapTiler API key to `map.js`:
+   ```javascript
+   const MAPTILER_API_KEY = 'your_api_key_here';
+   ```
 
-Since this is a web application, you need to serve the files through a web server. Here are a few options:
+3. Start a local web server:
+   ```bash
+   # Python 3
+   python -m http.server 8000
+   
+   # Python 2
+   python -m SimpleHTTPServer 8000
+   
+   # Node.js
+   npx http-server
+   ```
 
-#### Option A: Using Python (if you have Python installed)
-```bash
-# Python 3
-python -m http.server 8000
+4. Open `http://localhost:8000` in your browser
 
-# Python 2
-python -m SimpleHTTPServer 8000
+### Data Files
+- `Israel_Iran_Strikes_Data/Israel_Iran_Strikes.geojson` - Main event dataset
+- `IranAdminstrative.json/IranBoundary.json` - Iran administrative boundaries
+- `IsraelProvinces.json/IsraelBoundary.json` - Israel administrative boundaries
+
+## Usage
+
+### Basic Navigation
+- **Pan**: Click and drag to move around the map
+- **Zoom**: Use mouse wheel or zoom controls
+- **Event Details**: Click on any point to view detailed information
+
+### Timeline Controls
+- **Play/Pause**: Start or stop the timeline animation
+- **Reset**: Return to the beginning of the timeline
+- **Speed**: Adjust playback speed (1x, 2x, 3x, 5x)
+- **Slider**: Manually scrub through the timeline
+
+### Filtering Options
+- **Date Range**: Set start and end dates to filter events
+- **Country Toggle**: Show/hide events by country
+- **View Modes**: Switch between points and heatmap visualization
+- **Boundary Layers**: Toggle country administrative boundaries
+
+### Map Controls
+- **Fit to Data**: Automatically zoom to show all visible events
+- **Reset View**: Return to the default map view
+
+## Data Quality & Limitations
+
+### Strengths
+- **Comprehensive Coverage**: Multiple data sources ensure broad event capture
+- **Structured Format**: Consistent data schema enables reliable filtering
+- **Geographic Accuracy**: Validated coordinates for precise mapping
+- **Temporal Precision**: ISO-formatted dates support accurate timeline analysis
+- **AI-Enhanced Extraction**: LLM-assisted data extraction increases coverage and detail
+
+### Limitations
+- **Reporting Bias**: Events may be underreported or selectively covered
+- **Verification Challenges**: Some events may lack independent verification
+- **Geographic Precision**: Some locations may be approximate
+- **Temporal Gaps**: Potential delays in event reporting and data processing
+- **AI Extraction Accuracy**: LLM-extracted data requires manual validation
+
+### Data Validation Process
+- **Cross-Reference Verification**: Events verified against multiple sources
+- **Coordinate Validation**: Geographic coordinates checked against known locations
+- **Date Consistency**: Temporal data validated for logical consistency
+- **Duplicate Detection**: Automated and manual duplicate removal
+- **Source Attribution**: All events linked to original source URLs
+
+## API Documentation
+
+### MapLibre GL JS Integration
+The application uses MapLibre GL JS for map rendering and interaction:
+
+```javascript
+// Map initialization
+const map = new maplibregl.Map({
+    container: 'map',
+    style: `https://api.maptiler.com/maps/satellite/style.json?key=${MAPTILER_API_KEY}`,
+    center: [35.2137, 31.7683], // Jerusalem coordinates
+    zoom: 6,
+    minZoom: 3,
+    maxZoom: 18
+});
 ```
 
-#### Option B: Using Node.js (if you have Node.js installed)
-```bash
-# Install a simple HTTP server
-npm install -g http-server
-
-# Run the server
-http-server
+### Event Handling
+```javascript
+// Click event for popup display
+map.on('click', 'conflict-points', function(e) {
+    const feature = e.features[0];
+    showEventPopup(feature, e.lngLat);
+});
 ```
 
-#### Option C: Using Live Server (VS Code extension)
-1. Install the "Live Server" extension in VS Code
-2. Right-click on `index.html`
-3. Select "Open with Live Server"
-
-### 3. Access the Application
-
-Open your web browser and navigate to:
-- **Python**: `http://localhost:8000`
-- **Node.js http-server**: `http://localhost:8080`
-- **Live Server**: Usually `http://localhost:5500`
-
-## Data Sources
-
-The application uses the following data:
-
-- **Conflict Events**: `Israel_Iran_Strikes.geojson` - Contains detailed information about conflict events including:
-  - Event ID
-  - Date
-  - Country
-  - City/Region
-  - Weapon Type
-  - Reported Impact
-  - Source URL
-  - Geographic coordinates
-
-- **Boundary Data**: Administrative boundaries for Iran and Israel
-
-## Features in Detail
-
-### Timeline Slider
-- Filter events by date range
-- Shows the progression of events over time
-- Updates the map in real-time as you adjust the slider
-
-### View Modes
-- **Points**: Individual event markers with color coding by country
-- **Heatmap**: Density visualization of event clusters
-- **Clusters**: Grouped events (placeholder for future implementation)
-
-### Interactive Elements
-- **Click on points**: View detailed event information in popup and info panel
-- **Hover effects**: Visual feedback when hovering over points
-- **Layer toggles**: Show/hide boundary layers
-
-### Color Coding
-- **Red**: Israel-related events
-- **Teal**: Iran-related events
-- **Blue**: Other events
-
-## Browser Compatibility
-
-This application works best in modern browsers that support:
-- ES6 JavaScript features
-- CSS Grid
-- Fetch API
-- MapLibre GL JS
-
-Recommended browsers:
-- Chrome 60+
-- Firefox 55+
-- Safari 12+
-- Edge 79+
+### Data Filtering
+```javascript
+// Date range filtering
+function filterEventsByDateRange(startDate, endDate) {
+    const filteredEvents = conflictEvents.filter(event => {
+        const eventDate = new Date(event.properties.Date);
+        return eventDate >= startDate && eventDate <= endDate;
+    });
+    updateMapSource(filteredEvents);
+}
+```
 
 ## Troubleshooting
 
-### Map Not Loading
-- Check that you've added your MapTiler API key
-- Ensure you're running the application through a web server (not just opening the HTML file)
-- Check the browser console for error messages
+### Common Issues
 
-### Data Not Loading
-- Verify that the GeoJSON files are in the correct directories
-- Check that the file paths in `map.js` match your actual file structure
-- Look for CORS errors in the browser console
+**Map Not Loading**
+- Check MapTiler API key is valid and has sufficient credits
+- Ensure internet connection is stable
+- Verify browser supports WebGL
 
-### Styling Issues
-- Make sure `style.css` is in the same directory as `index.html`
-- Check that the CSS file is being loaded (inspect element in browser)
+**Data Not Displaying**
+- Check browser console for JavaScript errors
+- Verify GeoJSON files are accessible and properly formatted
+- Ensure data files are in the correct directory structure
 
-## Customization
+**Timeline Animation Issues**
+- Clear browser cache and refresh page
+- Check for JavaScript errors in console
+- Verify date format in data is ISO standard (YYYY-MM-DD)
 
-### Adding New Data
-To add new conflict events:
-1. Update the `Israel_Iran_Strikes.geojson` file with new features
-2. Ensure new features follow the same property structure
-3. Refresh the application
+**Mobile Display Problems**
+- Test on different mobile browsers
+- Check responsive breakpoints in CSS
+- Verify touch event handling
 
-### Changing Colors
-Modify the color values in:
-- `style.css` for legend colors
-- `map.js` for map point colors
+### Performance Optimization
+- **Large Datasets**: Consider implementing data clustering for better performance
+- **Memory Usage**: Monitor browser memory usage with large event datasets
+- **Loading Speed**: Optimize GeoJSON file sizes and implement progressive loading
 
-### Adding New Layers
-To add additional data layers:
-1. Add new GeoJSON files
-2. Update the `loadBoundaryData()` function in `map.js`
-3. Add corresponding layer controls to the HTML
+### Browser Compatibility
+- **Chrome**: Full support (recommended)
+- **Firefox**: Full support
+- **Safari**: Full support
+- **Edge**: Full support
+- **Mobile Browsers**: Responsive design optimized for iOS Safari and Chrome Mobile
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-This project is for educational and research purposes. Please ensure you have proper permissions for any data used.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Support
+## Acknowledgments
 
-If you encounter issues:
-1. Check the browser console for error messages
-2. Verify all file paths are correct
-3. Ensure you're running through a web server
-4. Check that your MapTiler API key is valid 
+- **Data Sources**: UCDP-GED, various news organizations
+- **Mapping Technology**: MapLibre GL JS, MapTiler
+- **Geocoding**: OpenStreetMap Nominatim
+- **AI Assistance**: ChatGPT-4 for data extraction
+
+## Contact
+
+For questions or contributions, please open an issue on GitHub or contact the maintainer.
+
+---
+
+*This visualization is for educational and research purposes. Event data is sourced from publicly available information and should be used responsibly.* 
