@@ -9,6 +9,13 @@ let currentViewMode = 'points';
 let popup = null;
 let mapLoaded = false;
 let clusterSource = null;
+let eventListenersSetup = false; // Flag to prevent duplicate event listener setup
+
+// Timeline animation variables
+let animationInterval = null;
+let isPlaying = false;
+let currentAnimationIndex = 0;
+let sortedEvents = [];
 
 // Initialize the map when the page loads
 document.addEventListener('DOMContentLoaded', function() {
@@ -24,9 +31,9 @@ function initializeMap() {
         container: 'map',
         style: `https://api.maptiler.com/maps/streets/style.json?key=${apiKey}`,
         center: [51.5, 32.5], // Better center between Israel and Iran
-        zoom: 6, // Closer zoom to study area
+        zoom: 4, // Start with a wider view
         maxZoom: 18,
-        minZoom: 4
+        minZoom: 1 // Allow users to zoom out much further
     });
 
     // Add navigation controls
@@ -51,6 +58,14 @@ function initializeMap() {
         console.error('Map error:', e);
         document.getElementById('event-info').innerHTML = '<p style="color: red;">Map error occurred. Please check the console for details.</p>';
     });
+
+    // Initialize timeline animation
+    initializeTimelineAnimation();
+    
+    // Set initial date display
+    updateDateDisplay('From 11/06/2025');
+    
+    console.log('Map initialization complete');
 }
 
 // Load GeoJSON data
@@ -82,8 +97,19 @@ async function loadData() {
         // Add data to map
         addDataToMap();
         
-        // Setup event listeners after data is loaded
-        setupEventListeners();
+        // Setup event listeners after data is loaded (only once)
+        if (!eventListenersSetup) {
+            setupEventListeners();
+            eventListenersSetup = true;
+        }
+        
+        // Initialize timeline animation
+        initializeTimelineAnimation();
+        
+        // Automatically fit to data after everything is loaded
+        setTimeout(() => {
+            fitMapToData();
+        }, 500); // Small delay to ensure all layers are rendered
         
         console.log('Data loading completed successfully');
         
@@ -167,15 +193,27 @@ function calculateDateRange() {
         
         console.log(`Date range: ${dateRange.min.toDateString()} to ${dateRange.max.toDateString()}`);
         
-        // Update timeline slider
+        // Update timeline slider - set to show events from 11/06/2025
         const slider = document.getElementById('timeline-slider');
-        slider.min = 0;
-        slider.max = dates.length - 1;
-        slider.value = dates.length - 1;
+        if (slider) {
+            slider.min = 0;
+            slider.max = dates.length - 1;
+            // Set to show events from 11/06/2025 onwards
+            const defaultDate = new Date('2025-06-11');
+            const firstEventIndex = dates.findIndex(date => date >= defaultDate);
+            slider.value = firstEventIndex >= 0 ? firstEventIndex : 0;
+        }
         
         // Set date inputs
-        document.getElementById('start-date').value = dateRange.min.toISOString().split('T')[0];
-        document.getElementById('end-date').value = dateRange.max.toISOString().split('T')[0];
+        const startDateInput = document.getElementById('start-date');
+        const endDateInput = document.getElementById('end-date');
+        
+        if (startDateInput) {
+            startDateInput.value = dateRange.min.toISOString().split('T')[0];
+        }
+        if (endDateInput) {
+            endDateInput.value = dateRange.max.toISOString().split('T')[0];
+        }
         
         updateDateDisplay();
     } else {
@@ -187,12 +225,19 @@ function calculateDateRange() {
 function addDataToMap() {
     console.log('Adding data to map...');
     
+    // Initially show events from 11/06/2025 onwards
+    const defaultDate = new Date('2025-06-11');
+    const initialEvents = conflictEvents.filter(event => {
+        const eventDate = new Date(event.properties.Date);
+        return eventDate >= defaultDate;
+    });
+    
     // Add conflict events source
     map.addSource('conflict-events', {
         type: 'geojson',
         data: {
             type: 'FeatureCollection',
-            features: conflictEvents
+            features: initialEvents
         }
     });
     
@@ -271,13 +316,31 @@ function showEventPopup(feature, lngLat) {
     const properties = feature.properties;
     
     const popupContent = `
-        <div class="popup-title">${properties.Event_ID || 'Event'}</div>
-        <div class="popup-detail"><strong>Date:</strong> ${properties.Date || 'Unknown'}</div>
-        <div class="popup-detail"><strong>Country:</strong> ${properties.Country || 'Unknown'}</div>
-        <div class="popup-detail"><strong>Location:</strong> ${properties['City/Region'] || 'Unknown'}</div>
-        <div class="popup-detail"><strong>Weapon Type:</strong> ${properties.Weapon_Type || 'Unknown'}</div>
-        <div class="popup-detail"><strong>Impact:</strong> ${properties.Reported_Impact || 'Unknown'}</div>
-        ${properties.Source_URL ? `<div class="popup-detail"><strong>Source:</strong> <a href="${properties.Source_URL}" target="_blank">View Source</a></div>` : ''}
+        <div class="popup-content">
+            <div class="popup-title">${properties.Event_ID || 'Event'}</div>
+            <div class="popup-details">
+                <div class="popup-detail">
+                    <strong>Date:</strong> ${properties.Date || 'Unknown'}
+                </div>
+                <div class="popup-detail">
+                    <strong>Country:</strong> ${properties.Country || 'Unknown'}
+                </div>
+                <div class="popup-detail">
+                    <strong>Location:</strong> ${properties['City/Region'] || 'Unknown'}
+                </div>
+                <div class="popup-detail">
+                    <strong>Weapon Type:</strong> ${properties.Weapon_Type || 'Unknown'}
+                </div>
+                <div class="popup-detail">
+                    <strong>Impact:</strong> ${properties.Reported_Impact || 'Unknown'}
+                </div>
+                ${properties.Source_URL ? `
+                <div class="popup-detail">
+                    <strong>Source:</strong> <a href="${properties.Source_URL}" target="_blank">View Source</a>
+                </div>
+                ` : ''}
+            </div>
+        </div>
     `;
     
     popup.setLngLat(lngLat)
@@ -306,45 +369,106 @@ function updateInfoPanel(properties) {
 function setupEventListeners() {
     // Timeline slider
     const timelineSlider = document.getElementById('timeline-slider');
-    timelineSlider.addEventListener('input', function() {
-        filterEventsByDate(this.value);
-    });
+    if (timelineSlider) {
+        timelineSlider.addEventListener('input', function() {
+            // Stop animation if playing
+            if (isPlaying) {
+                stopAnimation();
+            }
+            filterEventsByDate(this.value);
+        });
+    }
+    
+    // Timeline animation controls
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    if (playPauseBtn) {
+        playPauseBtn.addEventListener('click', function() {
+            toggleAnimation();
+        });
+    }
+    
+    const resetAnimationBtn = document.getElementById('reset-animation-btn');
+    if (resetAnimationBtn) {
+        resetAnimationBtn.addEventListener('click', function() {
+            resetAnimation();
+        });
+    }
+    
+    const animationSpeed = document.getElementById('animation-speed');
+    if (animationSpeed) {
+        animationSpeed.addEventListener('change', function() {
+            // Restart animation with new speed if currently playing
+            if (isPlaying) {
+                stopAnimation();
+                startAnimation();
+            }
+        });
+    }
     
     // Date range inputs
-    document.getElementById('apply-date-btn').addEventListener('click', function() {
-        filterEventsByDateRange();
-    });
+    const applyDateBtn = document.getElementById('apply-date-btn');
+    if (applyDateBtn) {
+        applyDateBtn.addEventListener('click', function() {
+            filterEventsByDateRange();
+        });
+    }
     
     // View mode buttons
-    document.getElementById('points-btn').addEventListener('click', function() {
-        setViewMode('points');
-    });
+    const pointsBtn = document.getElementById('points-btn');
+    if (pointsBtn) {
+        pointsBtn.addEventListener('click', function() {
+            setViewMode('points');
+        });
+    }
     
-    document.getElementById('heatmap-btn').addEventListener('click', function() {
-        setViewMode('heatmap');
-    });
-    
-    document.getElementById('clusters-btn').addEventListener('click', function() {
-        setViewMode('clusters');
-    });
+    const heatmapBtn = document.getElementById('heatmap-btn');
+    if (heatmapBtn) {
+        heatmapBtn.addEventListener('click', function() {
+            setViewMode('heatmap');
+        });
+    }
     
     // Boundary toggles
-    document.getElementById('iran-boundary').addEventListener('change', function() {
-        toggleBoundaryLayer('iran-boundary-layer', this.checked);
-    });
+    const iranBoundary = document.getElementById('iran-boundary');
+    if (iranBoundary) {
+        iranBoundary.addEventListener('change', function() {
+            toggleBoundaryLayer('iran-boundary-layer', this.checked);
+        });
+    }
     
-    document.getElementById('israel-boundary').addEventListener('change', function() {
-        toggleBoundaryLayer('israel-boundary-layer', this.checked);
-    });
+    const israelBoundary = document.getElementById('israel-boundary');
+    if (israelBoundary) {
+        israelBoundary.addEventListener('change', function() {
+            toggleBoundaryLayer('israel-boundary-layer', this.checked);
+        });
+    }
     
     // Map control buttons
-    document.getElementById('reset-view-btn').addEventListener('click', function() {
-        resetMapView();
-    });
+    const resetViewBtn = document.getElementById('reset-view-btn');
+    if (resetViewBtn) {
+        resetViewBtn.addEventListener('click', function() {
+            resetMapView();
+        });
+    }
     
-    document.getElementById('fit-bounds-btn').addEventListener('click', function() {
-        fitMapToData();
-    });
+    const fitBoundsBtn = document.getElementById('fit-bounds-btn');
+    if (fitBoundsBtn) {
+        fitBoundsBtn.addEventListener('click', function() {
+            fitMapToData();
+        });
+    }
+    
+    // Mobile controls toggle
+    const toggleControlsBtn = document.getElementById('toggle-controls-btn');
+    if (toggleControlsBtn) {
+        toggleControlsBtn.addEventListener('click', function() {
+            const controlsContent = document.querySelector('.controls-content');
+            if (controlsContent) {
+                controlsContent.classList.toggle('show');
+                this.textContent = controlsContent.classList.contains('show') ? '⚙️ Hide Controls' : '⚙️ Controls';
+            }
+        });
+    }
 }
 
 // Filter events by date range
@@ -373,6 +497,11 @@ function filterEventsByDateRange() {
     
     updateDateDisplay(`${startDate} to ${endDate}`);
     console.log(`Filtered to ${filteredEvents.length} events`);
+    
+    // Fit to filtered data
+    setTimeout(() => {
+        fitMapToData();
+    }, 100);
 }
 
 // Filter events by date
@@ -395,11 +524,18 @@ function filterEventsByDate(sliderValue) {
     });
     
     updateDateDisplay(cutoffDate);
+    
+    // Fit to filtered data
+    setTimeout(() => {
+        fitMapToData();
+    }, 100);
 }
 
 // Update date display
 function updateDateDisplay(date = null) {
     const dateDisplay = document.getElementById('date-display');
+    if (!dateDisplay) return;
+    
     if (date) {
         if (typeof date === 'string') {
             dateDisplay.textContent = date;
@@ -417,7 +553,10 @@ function setViewMode(mode) {
     
     // Update button states
     document.querySelectorAll('.btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(`${mode}-btn`).classList.add('active');
+    const modeBtn = document.getElementById(`${mode}-btn`);
+    if (modeBtn) {
+        modeBtn.classList.add('active');
+    }
     
     // Update layer visibility
     switch (mode) {
@@ -428,21 +567,6 @@ function setViewMode(mode) {
         case 'heatmap':
             map.setLayoutProperty('conflict-points', 'visibility', 'none');
             map.setLayoutProperty('conflict-heatmap', 'visibility', 'visible');
-            break;
-        case 'clusters':
-            // For clustering, we'll implement a simple approach
-            // This creates larger circles for areas with many events
-            map.setLayoutProperty('conflict-points', 'visibility', 'visible');
-            map.setLayoutProperty('conflict-heatmap', 'visibility', 'none');
-            
-            // Update point size to show clustering effect
-            map.setPaintProperty('conflict-points', 'circle-radius', [
-                'interpolate',
-                ['linear'],
-                ['zoom'],
-                5, 6,
-                10, 12
-            ]);
             break;
     }
 }
@@ -458,16 +582,65 @@ function resetMapView() {
 
 // Fit map to data bounds
 function fitMapToData() {
-    if (conflictEvents.length === 0) return;
+    const currentSource = map.getSource('conflict-events');
+    if (!currentSource || !currentSource._data || currentSource._data.features.length === 0) {
+        console.warn('No visible events to fit to');
+        return;
+    }
     
     const bounds = new maplibregl.LngLatBounds();
-    conflictEvents.forEach(event => {
+    
+    // Add currently visible conflict events to bounds
+    currentSource._data.features.forEach(event => {
         bounds.extend(event.geometry.coordinates);
     });
     
+    // Add boundary data to bounds if available
+    try {
+        // Add Iran boundary bounds
+        const iranSource = map.getSource('iran-boundary');
+        if (iranSource && iranSource._data) {
+            iranSource._data.features.forEach(feature => {
+                if (feature.geometry.type === 'Polygon') {
+                    feature.geometry.coordinates[0].forEach(coord => {
+                        bounds.extend(coord);
+                    });
+                } else if (feature.geometry.type === 'MultiPolygon') {
+                    feature.geometry.coordinates.forEach(polygon => {
+                        polygon[0].forEach(coord => {
+                            bounds.extend(coord);
+                        });
+                    });
+                }
+            });
+        }
+        
+        // Add Israel boundary bounds
+        const israelSource = map.getSource('israel-boundary');
+        if (israelSource && israelSource._data) {
+            israelSource._data.features.forEach(feature => {
+                if (feature.geometry.type === 'Polygon') {
+                    feature.geometry.coordinates[0].forEach(coord => {
+                        bounds.extend(coord);
+                    });
+                } else if (feature.geometry.type === 'MultiPolygon') {
+                    feature.geometry.coordinates.forEach(polygon => {
+                        polygon[0].forEach(coord => {
+                            bounds.extend(coord);
+                        });
+                    });
+                }
+            });
+        }
+    } catch (error) {
+        console.warn('Could not add boundary data to bounds:', error);
+    }
+    
+    // Fit bounds with proper padding
     map.fitBounds(bounds, {
-        padding: 50,
-        duration: 2000
+        padding: { top: 50, bottom: 50, left: 50, right: 50 },
+        duration: 2000,
+        maxZoom: 12 // Prevent too much zoom
     });
 }
 
@@ -486,4 +659,118 @@ function formatDate(dateString) {
         month: 'short',
         day: 'numeric'
     });
+}
+
+// Timeline animation functions
+function initializeTimelineAnimation() {
+    // Sort events by date for animation
+    sortedEvents = conflictEvents
+        .filter(event => event.properties.Date)
+        .sort((a, b) => new Date(a.properties.Date) - new Date(b.properties.Date));
+    
+    console.log(`Timeline animation initialized with ${sortedEvents.length} events`);
+}
+
+function startAnimation() {
+    if (isPlaying) return;
+    
+    isPlaying = true;
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    if (playPauseBtn) {
+        playPauseBtn.textContent = '⏸ Pause';
+        playPauseBtn.classList.add('playing');
+    }
+    
+    const speed = parseInt(document.getElementById('animation-speed').value);
+    
+    animationInterval = setInterval(() => {
+        if (currentAnimationIndex >= sortedEvents.length) {
+            stopAnimation();
+            return;
+        }
+        
+        // Show events up to current index
+        const eventsToShow = sortedEvents.slice(0, currentAnimationIndex + 1);
+        
+        // Update map source
+        map.getSource('conflict-events').setData({
+            type: 'FeatureCollection',
+            features: eventsToShow
+        });
+        
+        // Update timeline slider
+        const slider = document.getElementById('timeline-slider');
+        if (slider) {
+            const progress = (currentAnimationIndex / (sortedEvents.length - 1)) * 100;
+            slider.value = progress;
+        }
+        
+        // Update date display
+        const currentEvent = sortedEvents[currentAnimationIndex];
+        if (currentEvent) {
+            updateDateDisplay(new Date(currentEvent.properties.Date));
+        }
+        
+        currentAnimationIndex++;
+    }, speed);
+}
+
+function stopAnimation() {
+    if (!isPlaying) return;
+    
+    isPlaying = false;
+    if (animationInterval) {
+        clearInterval(animationInterval);
+        animationInterval = null;
+    }
+    
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    if (playPauseBtn) {
+        playPauseBtn.textContent = '▶ Play';
+        playPauseBtn.classList.remove('playing');
+    }
+}
+
+function resetAnimation() {
+    stopAnimation();
+    currentAnimationIndex = 0;
+    
+    // Reset to show events from 11/06/2025 onwards
+    const defaultDate = new Date('2025-06-11');
+    const filteredEvents = conflictEvents.filter(event => {
+        const eventDate = new Date(event.properties.Date);
+        return eventDate >= defaultDate;
+    });
+    
+    map.getSource('conflict-events').setData({
+        type: 'FeatureCollection',
+        features: filteredEvents
+    });
+    
+    // Reset timeline slider to show from 11/06/2025
+    const slider = document.getElementById('timeline-slider');
+    if (slider && dateRange.min) {
+        const defaultDate = new Date('2025-06-11');
+        const dates = conflictEvents
+            .map(event => new Date(event.properties.Date))
+            .filter(date => !isNaN(date.getTime()))
+            .sort((a, b) => a - b);
+        const firstEventIndex = dates.findIndex(date => date >= defaultDate);
+        slider.value = firstEventIndex >= 0 ? firstEventIndex : 0;
+    }
+    
+    updateDateDisplay('From 11/06/2025');
+    
+    // Fit to data after showing filtered events
+    setTimeout(() => {
+        fitMapToData();
+    }, 100);
+}
+
+function toggleAnimation() {
+    if (isPlaying) {
+        stopAnimation();
+    } else {
+        startAnimation();
+    }
 } 
