@@ -157,7 +157,7 @@ async function loadBoundaryData() {
             type: 'line',
             source: 'iran-boundary',
             paint: {
-                'line-color': '#4ecdc4',
+                'line-color': '#e67e22',
                 'line-width': 2,
                 'line-opacity': 0.8
             }
@@ -257,7 +257,7 @@ function addDataToMap() {
             'circle-color': [
                 'case',
                 ['==', ['get', 'Country'], 'Israel'], '#ff6b6b',
-                ['==', ['get', 'Country'], 'Iran'], '#4ecdc4',
+                ['==', ['get', 'Country'], 'Iran'], '#e67e22',
                 '#45b7d1'
             ],
             'circle-opacity': 0.8,
@@ -279,7 +279,7 @@ function addDataToMap() {
                 ['linear'],
                 ['heatmap-density'],
                 0, 'rgba(0, 0, 255, 0)',
-                0.2, '#4ecdc4',
+                0.2, '#e67e22',
                 0.4, '#45b7d1',
                 0.6, '#ff6b6b',
                 0.8, '#ff4757',
