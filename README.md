@@ -48,6 +48,22 @@ Events were extracted from reputable media reports, including:
 ### 2. AI-Assisted Event Extraction
 To complement UCDP data and enrich detail, we extracted structured event data from textual news reports using a Large Language Model (LLM)-based method.
 
+**URL Collection Methodology:**
+News article URLs were systematically gathered using Google Advanced Search queries to ensure comprehensive coverage across major news outlets. Example search query:
+
+```
+(Iran OR Israel) AND (missile OR drone OR strike OR attack OR explosion) 
+(site:reuters.com OR site:apnews.com OR site:aljazeera.com OR site:bbc.com OR site:jpost.com OR site:haaretz.com) 
+after:2024-03-01
+```
+
+This methodology ensured:
+- **Systematic Coverage**: All major news outlets were systematically searched
+- **Relevant Keywords**: Focused on kinetic military events (missiles, drones, strikes, attacks, explosions)
+- **Temporal Filtering**: Limited to events after March 1, 2024
+- **Geographic Focus**: Targeted Iran-Israel conflict specifically
+- **Source Diversity**: Multiple perspectives from different news organizations
+
 **Approach:**
 We used ChatGPT-4 (or Claude/Grok) with a consistent prompt for extracting structured data from news articles.
 
