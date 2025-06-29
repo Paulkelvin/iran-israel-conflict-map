@@ -46,7 +46,7 @@ Events were extracted from reputable media reports, including:
 - CBS News
 
 ### 2. AI-Assisted Event Extraction
-To complement UCDP data and enrich detail, we extracted structured event data from textual news reports using a Large Language Model (LLM)-based method.
+To complement UCDP data and enrich detail, I extracted structured event data from textual news reports using a Large Language Model (LLM)-based method.
 
 **URL Collection Methodology:**
 News article URLs were systematically gathered using Google Advanced Search queries to ensure comprehensive coverage across major news outlets. Example search query:
@@ -65,7 +65,7 @@ This methodology ensured:
 - **Source Diversity**: Multiple perspectives from different news organizations
 
 **Approach:**
-We used ChatGPT-4 (or Claude/Grok) with a consistent prompt for extracting structured data from news articles.
+I used Grok with a consistent prompt for extracting structured data from news articles.
 
 **Prompt Template:**
 ```
@@ -110,7 +110,8 @@ The final dataset is a GeoJSON file containing verified and structured conflict 
 ### Map Configuration
 - **Library**: MapLibre GL JS v3.6.0
 - **Basemap Provider**: MapTiler (requires API key)
-- **Projection**: Web Mercator (EPSG:3857)
+- **Projection**: Web Mercator (EPSG:3857) - MapLibre GL JS default
+- **Data Coordinates**: WGS84 (EPSG:4326) - standard for GeoJSON
 - **Initial View**: Automatically fits to data bounds with padding
 - **Min/Max Zoom**: 3-18 for optimal detail levels
 
@@ -323,20 +324,16 @@ function filterEventsByDateRange(startDate, endDate) {
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgments
 
 - **Data Sources**: UCDP-GED, various news organizations
 - **Mapping Technology**: MapLibre GL JS, MapTiler
 - **Geocoding**: OpenStreetMap Nominatim
-- **AI Assistance**: ChatGPT-4 for data extraction
+- **AI Assistance**: Grok for data extraction
 
 ## Contact
 
-For questions or contributions, please open an issue on GitHub or contact the maintainer.
+For questions or contributions, please open an issue on GitHub or contact me at [ibukunadesanya0@gmail.com](mailto:ibukunadesanya0@gmail.com).
 
 ---
 
