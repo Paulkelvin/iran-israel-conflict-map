@@ -2,7 +2,7 @@
 
 An interactive web mapping application visualizing kinetic events from the 2025 Iran-Israel conflict using MapLibre GL JS and MapTiler basemaps.
 
-## Live Demo
+## Live App
 Access the live application at: [https://paulkelvin.github.io/iran-israel-conflict-map/](https://paulkelvin.github.io/iran-israel-conflict-map/)
 
 ## Features
