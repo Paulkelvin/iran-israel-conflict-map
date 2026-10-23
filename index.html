@@ -1,114 +1,302 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Israel-Iran Conflict Events Map</title>
+    <title>Iran–Israel Conflict Map & Kinetic Simulator (2024–2026)</title>
     
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <!-- MapLibre GL JS CSS -->
     <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+    <!-- Custom UI CSS -->
+    <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <h1>Iran-Israel Conflict Events Visualization</h1>
-            <p>Interactive mapping of conflict events and strikes between Iran and Israel</p>
+    <div class="app-shell">
+        <!-- CLEAN, UNCLUTTERED TOP NAVIGATION BAR -->
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <button id="drawer-toggle-btn" class="icon-btn" title="Toggle Side Panel">
+                    ☰
+                </button>
+                <div class="brand-title-wrap">
+                    <span class="live-dot"></span>
+                    <h1>Iran–Israel Conflict Map</h1>
+                    <span class="version-pill mono">2024–2026 VERIFIED</span>
+                </div>
+            </div>
+
+            <!-- Compact Non-Overlapping Stat Pills -->
+            <div class="top-stats-bar">
+                <div class="stat-pill">
+                    <span class="stat-label">Visible</span>
+                    <span class="stat-num mono" id="kpi-total">813</span>
+                </div>
+                <div class="stat-pill iran">
+                    <span class="stat-dot iran"></span>
+                    <span class="stat-label">Iran</span>
+                    <span class="stat-num mono" id="kpi-iran">653</span>
+                </div>
+                <div class="stat-pill israel">
+                    <span class="stat-dot israel"></span>
+                    <span class="stat-label">Israel</span>
+                    <span class="stat-num mono" id="kpi-israel">160</span>
+                </div>
+            </div>
+
+            <!-- Clean Action & Theme Controls -->
+            <div class="top-bar-right">
+                <button id="launch-salvo-btn" class="action-pill primary" title="Fire missile salvo for visible events">
+                    🚀 Launch Salvo
+                </button>
+                <button id="toggle-arcs-btn" class="action-pill active" title="Toggle missile flight paths">
+                    ☄️ Arcs
+                </button>
+                <div class="audio-pill-group" title="Adjust or mute missile & explosion volume">
+                    <button id="sound-toggle-btn" class="audio-mute-btn active" title="Mute / Unmute Audio">🔊</button>
+                    <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="70" aria-label="Audio Volume">
+                    <span id="volume-label" class="mono volume-label">70%</span>
+                </div>
+                <button id="theme-toggle-btn" class="action-pill theme-btn" title="Switch between Light and Dark Mode">
+                    🌙 Dark Mode
+                </button>
+            </div>
         </header>
 
-        <!-- Controls Panel -->
-        <div class="controls-panel">
-            <!-- Mobile Controls Toggle -->
-            <div class="mobile-controls-toggle">
-                <button id="toggle-controls-btn" class="btn toggle-btn">⚙️ Controls</button>
-            </div>
-            
-            <div class="controls-content">
-                <div class="control-group map-controls-group">
-                    <div class="section-header">Map Controls</div>
-                    <button id="reset-view-btn" class="btn">Reset</button>
-                    <button id="fit-bounds-btn" class="btn">Fit to Data</button>
-                </div>
-                <div class="control-group">
-                    <div class="section-header">Timeline</div>
-                    <div class="timeline-controls">
-                        <div class="timeline-slider-container">
-                            <input type="range" id="timeline-slider" min="0" max="100" value="100" class="slider">
-                            <span id="date-display">All Dates</span>
-                        </div>
-                        <div class="animation-controls">
-                            <button id="play-pause-btn" class="btn">▶ Play</button>
-                            <button id="reset-animation-btn" class="btn">⏹ Reset</button>
-                            <select id="animation-speed" class="speed-select">
-                                <option value="1000">1x</option>
-                                <option value="500">2x</option>
-                                <option value="250">4x</option>
-                                <option value="200">5x</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="control-group date-range-group">
-                    <div class="section-header">Date Range</div>
-                    <div class="date-range-flex">
-                        <input type="date" id="start-date" class="date-input" placeholder="Start Date">
-                        <input type="date" id="end-date" class="date-input" placeholder="End Date">
-                    </div>
-                    <button id="apply-date-btn" class="btn apply-btn">Apply</button>
-                </div>
-                <div class="control-group">
-                    <div class="section-header">View Mode</div>
-                    <div class="view-mode-group">
-                        <button id="points-btn" class="btn active">Points</button>
-                        <button id="heatmap-btn" class="btn">Heatmap</button>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="section-header">Layers</div>
-                    <div class="legend-item">
-                        <span class="legend-color boundary iran"></span>
-                        <input type="checkbox" id="iran-boundary" checked>
-                        <span>Iran Boundary</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color boundary israel"></span>
-                        <input type="checkbox" id="israel-boundary" checked>
-                        <span>Israel Boundary</span>
-                    </div>
-                </div>
-                <div class="control-group legend-group">
-                    <div class="section-header">Event Types</div>
-                    <div class="legend-item">
-                        <span class="legend-color israel"></span>
-                        <span>Strikes in Israel</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color iran"></span>
-                        <span>Strikes in Iran</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- MAIN MAP WORKSPACE (UNOBSTRUCTED VISUAL CANVAS) -->
+        <main class="workspace">
+            <div class="map-container">
+                <div id="map"></div>
+                <canvas id="kinetic-canvas"></canvas>
 
-        <!-- Map Container -->
-        <div id="map" class="map-container"></div>
-
-        <!-- Info Panel -->
-        <div class="info-panel">
-            <h3>Event Information</h3>
-            <div id="event-info">
-                <p>Click on a point to view event details</p>
+                <!-- SINGLE CLEAN TOP-CENTER STATUS PILL WITH INLINE PLAY CTA -->
+                <div class="status-toast" id="active-salvo-banner">
+                    <span id="salvo-status-text"><strong>813 Verified Strikes</strong> (Apr 2024 – Jul 2026) · Click any dot or press Play</span>
+                    <button id="banner-play-btn" class="toast-play-btn">▶ Play All</button>
+                </div>
             </div>
-        </div>
+
+            <!-- SINGLE FOCUSED LEFT DRAWER WITH 3 CLEAN TABS -->
+            <aside class="side-drawer" id="side-drawer">
+                <!-- Tab Navigation Bar -->
+                <nav class="drawer-tabs">
+                    <button class="tab-btn active" data-tab="tab-campaigns">
+                        🎯 Campaigns
+                    </button>
+                    <button class="tab-btn" data-tab="tab-explore">
+                        ⚡ Explore (<span id="feed-count-badge">813</span>)
+                    </button>
+                    <button class="tab-btn" data-tab="tab-layers">
+                        ⚙️ Layers
+                    </button>
+                </nav>
+
+                <!-- TAB 1: CAMPAIGNS & WAR PHASES -->
+                <div class="tab-pane active" id="tab-campaigns">
+                    <div class="pane-section">
+                        <label class="field-label">Conflict Era / Phase</label>
+                        <select id="war-phase-select" class="ui-select">
+                            <option value="all">All Phases (Apr 2024 – Jul 2026 · 63 Dates)</option>
+                            <option value="2024-war">2024 Direct Exchanges (Apr – Oct 2024)</option>
+                            <option value="2025-war">2025 Twelve-Day War (Jun – Jul 2025)</option>
+                            <option value="2026-war">2026 Renewed War (Feb – Jul 2026)</option>
+                            <option value="2026-opening">2026 Phase 1: Feb – Apr Campaign</option>
+                            <option value="2026-late">2026 Phase 2: Jun – Jul Exchanges</option>
+                        </select>
+                    </div>
+
+                    <div class="pane-section">
+                        <div class="pane-header-row">
+                            <label class="field-label">Key Historical Operations</label>
+                            <span class="hint-badge">Click to Simulate</span>
+                        </div>
+                        <div class="mission-list">
+                            <button class="mission-card" data-mission="true-promise-2024">
+                                <div class="mission-top">
+                                    <span class="mission-tag israel">APR – OCT 2024</span>
+                                    <span class="mission-play">▶ Simulate</span>
+                                </div>
+                                <div class="mission-name">2024 Origin: True Promise I & II</div>
+                                <div class="mission-desc">First-ever direct strikes on Nevatim, Tel Nof & Glilot and Israel's Op. Days of Repentance on Isfahan & Parchin.</div>
+                            </button>
+
+                            <button class="mission-card" data-mission="rising-lion">
+                                <div class="mission-top">
+                                    <span class="mission-tag iran">JUN 13–15, 2025</span>
+                                    <span class="mission-play">▶ Simulate</span>
+                                </div>
+                                <div class="mission-name">2025 War: Op. Rising Lion</div>
+                                <div class="mission-desc">Opening strikes on Natanz & Tehran nuclear/air-defense sites and Iran's salvos on Tel Aviv & Haifa.</div>
+                            </button>
+
+                            <button class="mission-card" data-mission="roaring-lion">
+                                <div class="mission-top">
+                                    <span class="mission-tag critical">FEB 28 – MAR 1, 2026</span>
+                                    <span class="mission-play">▶ Simulate</span>
+                                </div>
+                                <div class="mission-name">2026 War: Op. Roaring Lion</div>
+                                <div class="mission-desc">Pasteur District decapitation strike in Tehran & Iran's 150-missile retaliation on Tel Aviv & Beit Shemesh.</div>
+                            </button>
+
+                            <button class="mission-card" data-mission="cluster-oil">
+                                <div class="mission-top">
+                                    <span class="mission-tag israel">MAR 8–19, 2026</span>
+                                    <span class="mission-play">▶ Simulate</span>
+                                </div>
+                                <div class="mission-name">Oil Depots & Cluster Munitions</div>
+                                <div class="mission-desc">Tehran oil depot strikes vs. Iranian cluster warheads on Yehud, Ramat Gan & Bazan Haifa Refinery.</div>
+                            </button>
+
+                            <button class="mission-card" data-mission="nuclear-tit-for-tat">
+                                <div class="mission-top">
+                                    <span class="mission-tag iran">MAR 21, 2026</span>
+                                    <span class="mission-play">▶ Simulate</span>
+                                </div>
+                                <div class="mission-name">Natanz–Dimona Tit-for-Tat</div>
+                                <div class="mission-desc">Bunker-buster strike on Natanz followed by Iranian ballistic strikes on Dimona & Arad.</div>
+                            </button>
+
+                            <button class="mission-card" data-mission="june-exchange">
+                                <div class="mission-top">
+                                    <span class="mission-tag critical">JUN 7–8, 2026</span>
+                                    <span class="mission-play">▶ Simulate</span>
+                                </div>
+                                <div class="mission-name">June Ceasefire Breakdown</div>
+                                <div class="mission-desc">Direct exchange between Ramat David, Tel Nof & Nevatim airbases and Mahshahr, Tehran & Tabriz.</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: EXPLORE & FILTER STRIKE FEED (ALL 63 DATES) -->
+                <div class="tab-pane" id="tab-explore">
+                    <div class="pane-section compact-filters">
+                        <div class="explore-status-row" id="explore-filter-banner">
+                            <span id="explore-dates-summary">Showing <strong>63 dates</strong> (813 events)</span>
+                            <button id="explore-show-all-btn" class="mini-reset-btn" title="Reset filters and show all 2024–2026 dates">Show All Dates</button>
+                        </div>
+
+                        <input type="text" id="feed-search-input" class="ui-input" placeholder="🔍 Search city, date, weapon, target...">
+                        
+                        <div class="filter-row-2col">
+                            <div>
+                                <label class="field-label">Target Type</label>
+                                <select id="target-type-select" class="ui-select">
+                                    <option value="all">All Targets</option>
+                                    <option value="Nuclear Facility">☢️ Nuclear</option>
+                                    <option value="Military Base">🛡️ Military Base</option>
+                                    <option value="Strategic Infrastructure">⚡ Infrastructure</option>
+                                    <option value="Urban Area">🏙️ Urban Area</option>
+                                    <option value="Civilian Area">🏘️ Civilian Area</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="field-label">Country</label>
+                                <div class="country-check-row">
+                                    <label class="chip-check">
+                                        <input type="checkbox" id="filter-iran" checked>
+                                        <span class="dot iran"></span> Iran (<span id="count-iran">653</span>)
+                                    </label>
+                                    <label class="chip-check">
+                                        <input type="checkbox" id="filter-israel" checked>
+                                        <span class="dot israel"></span> Israel (<span id="count-israel">160</span>)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="live-strike-feed" class="strike-feed-list">
+                        <!-- Populated dynamically with date headers across all active dates -->
+                    </div>
+                </div>
+
+                <!-- TAB 3: MAP SETTINGS, DATE WINDOW & LAYERS -->
+                <div class="tab-pane" id="tab-layers">
+                    <div class="pane-section">
+                        <label class="field-label">Display Mode</label>
+                        <div class="segmented-control">
+                            <button id="points-btn" class="seg-btn active">Strike Points</button>
+                            <button id="heatmap-btn" class="seg-btn">Intensity Heatmap</button>
+                        </div>
+                    </div>
+
+                    <div class="pane-section">
+                        <label class="field-label">Map Basemap</label>
+                        <div class="segmented-control">
+                            <button class="seg-btn style-btn active" data-style="auto">Auto Theme</button>
+                            <button class="seg-btn style-btn" data-style="hybrid">Satellite</button>
+                            <button class="seg-btn style-btn" data-style="streets">Streets</button>
+                        </div>
+                    </div>
+
+                    <div class="pane-section">
+                        <label class="field-label">Custom Date Range</label>
+                        <div class="date-range-flex">
+                            <input type="date" id="start-date" class="ui-input">
+                            <input type="date" id="end-date" class="ui-input">
+                        </div>
+                        <button id="apply-date-btn" class="ui-btn full-width">Apply Custom Dates</button>
+                    </div>
+
+                    <div class="pane-section">
+                        <label class="field-label">Border Overlays</label>
+                        <label class="layer-row">
+                            <input type="checkbox" id="iran-boundary" checked>
+                            <span class="line-swatch iran"></span>
+                            <span>Iran Border Perimeter</span>
+                        </label>
+                        <label class="layer-row">
+                            <input type="checkbox" id="israel-boundary" checked>
+                            <span class="line-swatch israel"></span>
+                            <span>Israel Border Perimeter</span>
+                        </label>
+                    </div>
+
+                    <div class="pane-section">
+                        <label class="field-label">Camera Controls</label>
+                        <div class="filter-row-2col">
+                            <button id="fit-bounds-btn" class="ui-btn">🎯 Fit Active Data</button>
+                            <button id="reset-view-btn" class="ui-btn">🌍 Reset View</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- CONTEXTUAL INTELLIGENCE CARD (TOP-RIGHT, APPEARS ON FOCUS / DISMISSIBLE) -->
+            <aside class="context-dossier hidden" id="dossier-panel">
+                <div class="dossier-bar">
+                    <span class="dossier-bar-title">📡 Strike Intelligence</span>
+                    <button id="close-dossier-btn" class="dossier-close" title="Close details">✕</button>
+                </div>
+                <div id="event-info"></div>
+            </aside>
+
+            <!-- SINGLE-LINE SLEEK BOTTOM TIMELINE PILL -->
+            <section class="timeline-dock">
+                <button id="play-pause-btn" class="play-pill">🚀 Play All</button>
+                <button id="reset-animation-btn" class="icon-pill" title="Reset Timeline">↺</button>
+                <input type="range" id="timeline-slider" min="0" max="812" step="1" value="812" class="slider">
+                <span id="date-display" class="mono date-readout">Apr 14, 2024 – Jul 19, 2026 (813)</span>
+                <select id="animation-speed" class="speed-pill" title="Simulation Speed">
+                    <option value="0.5">0.5x Slow</option>
+                    <option value="1" selected>1x Normal</option>
+                    <option value="2">2x Fast</option>
+                    <option value="4">4x Rapid</option>
+                </select>
+            </section>
+        </main>
     </div>
 
     <!-- MapLibre GL JS -->
     <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
     
-    <!-- Custom JavaScript -->
-    <script src="map.js"></script>
+    <!-- Custom Application JS -->
+    <script src="map.js?v=9"></script>
 </body>
-</html> 
+</html>
